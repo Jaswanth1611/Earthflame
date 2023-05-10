@@ -2,53 +2,71 @@
 <html>
 <head>
     <title>Games Website</title>
+    <style>
+        #game-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to the Games Website</h1>
+    <h1>Welcome to the Games Website!</h1>
 
-    <div id="login">
-        <h2>Login</h2>
-        <input type="password" id="password" placeholder="Enter password">
-        <button onclick="authenticate()">Login</button>
-    </div>
+    <form id="password-form">
+        <label for="password">Enter Password:</label>
+        <input type="password" id="password" />
+        <button type="submit">Submit</button>
+    </form>
 
-    <div id="gameList" style="display: none;">
-        <h2>Add Game</h2>
-        <input type="text" id="gameLink" placeholder="Enter game link">
-        <button onclick="addGame()">Add</button>
-    </div>
-
-    <div id="gameContainer"></div>
+    <div id="game-container"></div>
 
     <script>
-        // Password for accessing the website
-        const password = "asdf1234";
-        
-        // Function to authenticate the password
-        function authenticate() {
-            const enteredPassword = document.getElementById("password").value;
+        // Store the correct password
+        const correctPassword = "asdf1234";
 
-            if (enteredPassword === password) {
-                // Show game list section
-                document.getElementById("login").style.display = "none";
-                document.getElementById("gameList").style.display = "block";
+        // Listen for form submission
+        const form = document.getElementById("password-form");
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+            const passwordInput = document.getElementById("password");
+            const enteredPassword = passwordInput.value;
+            if (enteredPassword === correctPassword) {
+                passwordInput.value = ""; // Clear the password input field
+                displayGameContainer();
             } else {
                 alert("Incorrect password. Please try again.");
             }
+        });
+
+        // Function to display the game container
+        function displayGameContainer() {
+            const passwordForm = document.getElementById("password-form");
+            passwordForm.style.display = "none"; // Hide the password form
+            const gameContainer = document.getElementById("game-container");
+
+            // Retrieve and display the games
+            const games = getGames(); // Replace this with your own logic to fetch games from your database or storage
+            games.forEach(game => {
+                const gameFrame = document.createElement("iframe");
+                gameFrame.src = game.url;
+                gameFrame.frameBorder = "0";
+                gameFrame.width = "100%";
+                gameFrame.height = "100%";
+                gameContainer.appendChild(gameFrame);
+            });
         }
 
-        // Function to add a game
-        function addGame() {
-            const gameLink = document.getElementById("gameLink").value;
-
-            // Create an iframe to display the game
-            const iframe = document.createElement("iframe");
-            iframe.src = gameLink;
-            iframe.style.width = "100%";
-            iframe.style.height = "500px";
-
-            // Append the iframe to the game container
-            document.getElementById("gameContainer").appendChild(iframe);
+        // Mock function to retrieve games
+        function getGames() {
+            return [
+                { url: "https://example.com/game1" },
+                { url: "https://example.com/game2" },
+                { url: "https://example.com/game3" }
+                // Add more games as needed
+            ];
         }
     </script>
 </body>
