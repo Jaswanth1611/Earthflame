@@ -28,10 +28,8 @@
   <!-- Game listing -->
   <div id="game-list" style="display: none;">
     <h2>Game list:</h2>
-    <ul>
-      <li><a href="#" onclick="playGame('https://example.com/game1')">Game 1</a></li>
-      <li><a href="#" onclick="playGame('https://example.com/game2')">Game 2</a></li>
-      <!-- More game links can be added here dynamically -->
+    <ul id="game-links">
+      <!-- Existing game links will be added dynamically here -->
     </ul>
   </div>
 
@@ -63,14 +61,22 @@
   <!-- Game submission script -->
   <script>
     const submissionForm = document.querySelector('#submission-form form');
-    const gameList = document.getElementById('game-list');
+    const gameLinks = document.getElementById('game-links');
     const gamePlayer = document.getElementById('game-player');
 
     submissionForm.addEventListener('submit', function(event) {
       event.preventDefault();
       const gameUrlInput = document.getElementById('game-url');
       const gameUrl = gameUrlInput.value;
-      gameList.innerHTML += `<li><a href="#" onclick="playGame('${gameUrl}')">${gameUrl}</a></li>`;
+      const gameLink = document.createElement('li');
+      const gameLinkAnchor = document.createElement('a');
+      gameLinkAnchor.href = '#';
+      gameLinkAnchor.innerText = gameUrl;
+      gameLinkAnchor.onclick = function() {
+        playGame(gameUrl);
+      };
+      gameLink.appendChild(gameLinkAnchor);
+      gameLinks.appendChild(gameLink);
       gameUrlInput.value = '';
     });
   </script>
